@@ -64,19 +64,60 @@
       color: var(--muted);
     }
     .card.disabled { cursor: not-allowed; opacity: .75; }
+    .card .status.live { color: var(--accent); border-color: var(--accent); }
+    .top {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      align-items: center;
+      gap: 16px;
+      margin-bottom: 32px;
+    }
+    .top .subtitle { margin: 0; }
+    .clock {
+      padding: 16px 24px;
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      text-align: right;
+    }
+    .clock-time {
+      font-size: 2rem;
+      font-weight: 700;
+      font-variant-numeric: tabular-nums;
+      letter-spacing: .02em;
+    }
+    .clock-date { font-size: .9rem; color: var(--muted); }
+    .section-title {
+      margin: 0 0 12px;
+      font-size: .85rem;
+      font-weight: 600;
+      color: var(--muted);
+      text-transform: uppercase;
+      letter-spacing: .05em;
+    }
   </style>
 </head>
 <body>
   <main>
-    <h1>AI2 Lecture Lab</h1>
-    <p class="subtitle">실습 자료 모음</p>
+    <header class="top">
+      <div>
+        <h1>AI2 Lecture Lab</h1>
+        <p class="subtitle">실습 자료 대시보드</p>
+      </div>
+      <div class="clock" aria-live="off">
+        <div class="clock-time" id="clock-time">--:--:--</div>
+        <div class="clock-date" id="clock-date"></div>
+      </div>
+    </header>
 
+    <h3 class="section-title">프로젝트</h3>
     <section class="grid">
       <!-- 링크 연결 시: href="#" 를 실제 주소로 바꾸고 class="disabled", aria-disabled 제거 -->
-      <a class="card disabled" href="#" aria-disabled="true">
+      <a class="card" href="https://ai-lecture-lab.github.io/to-do-list" target="_blank" rel="noopener">
         <span class="num">01</span>
         <h2>할일 목록 리스트</h2>
-        <span class="status">준비 중</span>
+        <span class="status live">바로가기 →</span>
       </a>
       <a class="card disabled" href="#" aria-disabled="true">
         <span class="num">02</span>
@@ -99,6 +140,18 @@
     document.querySelectorAll('.card.disabled').forEach(function (el) {
       el.addEventListener('click', function (e) { e.preventDefault(); });
     });
+
+    var timeEl = document.getElementById('clock-time');
+    var dateEl = document.getElementById('clock-date');
+    function tick() {
+      var now = new Date();
+      timeEl.textContent = now.toLocaleTimeString('ko-KR', { hour12: false });
+      dateEl.textContent = now.toLocaleDateString('ko-KR', {
+        year: 'numeric', month: 'long', day: 'numeric', weekday: 'long'
+      });
+    }
+    tick();
+    setInterval(tick, 1000);
   </script>
 </body>
 </html>
